@@ -56,8 +56,17 @@
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
                 echo '<input type="submit" value="Delete">';
                 echo '</form>';
+                
+                // Add the add annotation form
+                echo '<form class="add-annotation-form" method="POST">';
+                echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
+                echo '<input type="text" name="coordinates" placeholder="Coordinates" required>';
+                echo '<input type="submit" value="Add Annotation">';
+                echo '</form>';
 
                 echo '</div>';
+
+
             }
         } else {
             echo '<p>No uploaded photos found.</p>';
