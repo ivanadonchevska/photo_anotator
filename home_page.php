@@ -52,7 +52,7 @@
                 }
 
                 // Add the delete button
-                echo '<form class="delete-form" method="POST" action="delete_photo.php">';
+                echo '<form class="delete-form" method="POST" action="delete.php">';
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
                 echo '<input type="submit" value="Delete">';
                 echo '</form>';
@@ -65,8 +65,6 @@
                 echo '</form>';
 
                 echo '</div>';
-
-
             }
         } else {
             echo '<p>No uploaded photos found.</p>';
@@ -122,7 +120,7 @@
 
                 var photoId = form.querySelector("input[name='photo_id']").value;
 
-                fetch("delete_photo.php", {
+                fetch("delete.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
