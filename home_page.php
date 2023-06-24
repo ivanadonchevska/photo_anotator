@@ -52,7 +52,7 @@
                 }
 
                 // Add the delete button
-                echo '<form class="delete-form" method="POST" action="delete.php">';
+                echo '<form class="delete-form" method="POST">';
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
                 echo '<input type="submit" value="Delete">';
                 echo '</form>';
@@ -103,6 +103,9 @@
                         img.alt = "Uploaded Photo";
                         img.style.maxWidth = "500px";
                         document.getElementById("photo-container").appendChild(img);
+
+                        // Refresh the page after uploading
+                        location.reload();
                     } else {
                         console.log(data.message);
                     }
@@ -128,15 +131,8 @@
                     body: "photo_id=" + encodeURIComponent(photoId),
                 })
                     .then(function (response) {
-                        return response.json();
-                    })
-                    .then(function (data) {
-                        if (data.status === "success") {
-                            // Remove the deleted photo from the page
-                            form.parentNode.remove();
-                        } else {
-                            console.log(data.message);
-                        }
+                        // Remove the photo from the home page
+                        form.parentNode.remove();
                     })
                     .catch(function (error) {
                         console.log(error);
