@@ -15,37 +15,82 @@ if (isset($_POST["photo_id"])) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Prepare a statement to delete the photo and associated annotations
-    $deletePhotoSql = "DELETE FROM photos WHERE id = ?";
+    // Delete the annotations associated with the photo
     $deleteAnnotationsSql = "DELETE FROM annotations WHERE photo_id = ?";
-
-    // Use prepared statements to prevent SQL injection
-    $deletePhotoStmt = $conn->prepare($deletePhotoSql);
     $deleteAnnotationsStmt = $conn->prepare($deleteAnnotationsSql);
 
-    if ($deletePhotoStmt && $deleteAnnotationsStmt) {
+    // Use prepared statements to prevent SQL injection
+    if ($deleteAnnotationsStmt) {
         // Bind the photo ID parameter to the prepared statement
-        $deletePhotoStmt->bind_param("i", $photoId);
         $deleteAnnotationsStmt->bind_param("i", $photoId);
 
-        // Execute the prepared statements
-        $deletePhotoResult = $deletePhotoStmt->execute();
-        $deleteAnnotationsResult = $deleteAnnotationsStmt->execute();
+        // Execute the prepared statement to delete annotations
+        $deleteAnnotationsStmt->execute();
 
-        if ($deletePhotoResult && $deleteAnnotationsResult) {
-            // Return success status
-            $response = array("status" => "success");
+        // Check if annotations were deleted successfully
+        if ($deleteAnnotationsStmt->affected_rows > 0) {
+            // Annotations deleted successfully
+            // Now delete the photo
+            $deletePhotoSql = "DELETE FROM photos WHERE id = ?";
+            $deletePhotoStmt = $conn->prepare($deletePhotoSql);
+
+            if ($deletePhotoStmt) {
+                // Bind the photo ID parameter to the prepared statement
+                $deletePhotoStmt->bind_param("i", $photoId);
+
+                // Execute the prepared statement to delete the photo
+                $deletePhotoStmt->execute();
+
+                // Check if the photo was deleted successfully
+                if ($deletePhotoStmt->affected_rows > 0) {
+                    // Photo and annotations deleted successfully
+                    $response = array("status" => "success");
+                } else {
+                    // Failed to delete the photo
+                    $response = array("status" => "error", "message" => "Failed to delete the photo.");
+                }
+
+                // Close the prepared statement for deleting the photo
+                $deletePhotoStmt->close();
+            } else {
+                // Failed to prepare the statement for deleting the photo
+                $response = array("status" => "error", "message" => "Failed to prepare the statement for deleting the photo.");
+            }
         } else {
-            // Return error message
-            $response = array("status" => "error", "message" => "Failed to delete the photo and its annotations.");
+            // No annotations found for the given photo ID
+            // Still attempt to delete the photo
+            $deletePhotoSql = "DELETE FROM photos WHERE id = ?";
+            $deletePhotoStmt = $conn->prepare($deletePhotoSql);
+
+            if ($deletePhotoStmt) {
+                // Bind the photo ID parameter to the prepared statement
+                $deletePhotoStmt->bind_param("i", $photoId);
+
+                // Execute the prepared statement to delete the photo
+                $deletePhotoStmt->execute();
+
+                // Check if the photo was deleted successfully
+                if ($deletePhotoStmt->affected_rows > 0) {
+                    // Photo deleted successfully
+                    $response = array("status" => "success");
+                } else {
+                    // Failed to delete the photo
+                    $response = array("status" => "error", "message" => "Failed to delete the photo.");
+                }
+
+                // Close the prepared statement for deleting the photo
+                $deletePhotoStmt->close();
+            } else {
+                // Failed to prepare the statement for deleting the photo
+                $response = array("status" => "error", "message" => "Failed to prepare the statement for deleting the photo.");
+            }
         }
 
-        // Close the prepared statements
-        $deletePhotoStmt->close();
+        // Close the prepared statement for deleting the annotations
         $deleteAnnotationsStmt->close();
     } else {
-        // Return error message
-        $response = array("status" => "error", "message" => "Failed to prepare the delete statements.");
+        // Failed to prepare the statement for deleting the annotations
+        $response = array("status" => "error", "message" => "Failed to prepare the statement for deleting the annotations.");
     }
 
     // Close the database connection
