@@ -54,13 +54,14 @@
                 // Add the delete button
                 echo '<form class="delete-form" method="POST">';
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
-                echo '<input type="submit" value="Delete">';
+                echo '<input type="button" value="Delete" onclick="deletePhoto(' . $photoId . ')">';
                 echo '</form>';
                 
                 // Add the add annotation form
                 echo '<form class="add-annotation-form" method="POST">';
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
                 echo '<input type="text" name="coordinates" placeholder="Coordinates" required>';
+                echo '<input type="text" name="additional_data" placeholder="Additional Data" required>';
                 echo '<input type="submit" value="Add Annotation">';
                 echo '</form>';
 
@@ -98,13 +99,7 @@
                 })
                 .then(function (data) {
                     if (data.status === "success") {
-                        var img = document.createElement("img");
-                        img.src = data.photo_path;
-                        img.alt = "Uploaded Photo";
-                        img.style.maxWidth = "500px";
-                        document.getElementById("photo-container").appendChild(img);
-
-                        // Refresh the page after uploading
+                        // Reload the page to display the new photo
                         location.reload();
                     } else {
                         console.log(data.message);
@@ -115,24 +110,62 @@
                 });
         });
 
-        // Handle the form submission for deleting a photo
-        var deleteForms = document.querySelectorAll(".delete-form");
-        deleteForms.forEach(function (form) {
+        
+
+    // Handle the form submission for deleting a photo
+    function deletePhoto(photoId) {
+        if (confirm("Are you sure you want to delete this photo?")) {
+            fetch("delete.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "photo_id=" + encodeURIComponent(photoId),
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (data.status === "success") {
+                        // Remove the deleted photo from the page
+                        var photoDiv = document.querySelector('input[name="photo_id"][value="' + photoId + '"]').parentNode;
+                        photoDiv.parentNode.removeChild(photoDiv);
+                        // Reload the page to reflect the changes
+                        location.reload();
+                    } else {
+                        console.log(data.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    }
+
+
+        // Handle the form submission for adding an annotation
+        var addAnnotationForms = document.querySelectorAll(".add-annotation-form");
+        addAnnotationForms.forEach(function (form) {
             form.addEventListener("submit", function (e) {
                 e.preventDefault(); // Prevent the form from submitting
 
-                var photoId = form.querySelector("input[name='photo_id']").value;
+                var formData = new FormData(this);
+                var photoId = this.querySelector('input[name="photo_id"]').value;
 
-                fetch("delete.php", {
+                fetch("add_annotation.php", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: "photo_id=" + encodeURIComponent(photoId),
+                    body: formData,
                 })
                     .then(function (response) {
-                        // Remove the photo from the home page
-                        form.parentNode.remove();
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        if (data.status === "success") {
+                            // Reload the page to display the updated annotation
+                            location.reload();
+                        } else {
+                            console.log(data.message);
+                        }
                     })
                     .catch(function (error) {
                         console.log(error);

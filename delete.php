@@ -37,7 +37,7 @@ if (isset($_POST["photo_id"])) {
             $response = array("status" => "success");
         } else {
             // Return error message
-            $response = array("status" => "error", "message" => "Failed to delete the photo.");
+            $response = array("status" => "error", "message" => "Failed to delete the photo and its annotations.");
         }
 
         // Close the prepared statements
