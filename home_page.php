@@ -94,6 +94,21 @@
     <!-- Display uploaded photos with annotations -->
     <div id="photo-container">
         <?php
+        session_start();
+        if (!isset($_SESSION['username'])) {
+            header("Location: login.php");
+            exit;
+        }
+        
+        // Handle logout
+        if (isset($_POST['logout'])) {
+            // Destroy the session
+            session_destroy();
+        
+            // Redirect the user to the login page
+            header("Location: login.php");
+            exit;
+        }
         // Configuration for database connection
         $servername = "localhost";
         $username = "root";
@@ -114,15 +129,13 @@
             while ($row = $result->fetch_assoc()) {
                 $photoId = $row["id"];
                 $photoPath = $row["path"];
-                $photoName = $row["name"];
-
+                
                 // Retrieve annotations for the current photo
                 $annotationSql = "SELECT * FROM annotations WHERE photo_id = $photoId";
                 $annotationResult = $conn->query($annotationSql);
 
                 // Display the photo and annotations
                 echo '<div>';
-                echo '<h2>Photo: ' . $photoName . '</h2>';
                 echo '<img src="' . $photoPath . '" alt="Uploaded Photo" style="max-width: 500px;"><br>';
 
                 if ($annotationResult->num_rows > 0) {
@@ -138,7 +151,7 @@
                 } else {
                     echo '<p>No annotations available for this photo.</p>';
                 }
-
+                
                 // Add the delete button
                 echo '<form class="delete-form" method="POST">';
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
