@@ -136,8 +136,8 @@
                 $annotationResult = $conn->query($annotationSql);
 
                 // Display the photo and annotations
-                echo '<div>';
-                echo '<img src="' . $photoPath . '" alt="Uploaded Photo" style="max-width: 500px;"><br>';
+                //echo '<div>';
+                //echo '<img src="' . $photoPath . '" alt="Uploaded Photo" style="max-width: 500px;"><br>';
 
                 if ($annotationResult->num_rows > 0) {
                     echo '<ul>';
@@ -153,6 +153,12 @@
                     echo '<p>No annotations available for this photo.</p>';
                 }
                 
+                // Display the photo as a link to the panorama viewer
+                echo '<div>';
+                echo '<a href="panorama_viewer.php?id=' . $photoId . '">';
+                echo '<img src="' . $photoPath . '" alt="Uploaded Photo" style="max-width: 500px;"><br>';
+                echo '</a>';
+                echo '</div>';
                 // Add the delete button
                 echo '<form class="delete-form" method="POST">';
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
