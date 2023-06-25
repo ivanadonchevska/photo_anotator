@@ -153,6 +153,12 @@
                 echo '<input type="submit" value="Add Annotation">';
                 echo '</form>';
 
+                // Add the delete all annotations form
+                echo '<form class="delete-all-annotations-form" method="POST">';
+                echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
+                echo '<input type="submit" value="Delete All Annotations">';
+                echo '</form>';
+
                 echo '</div>';
             }
         } else {
@@ -197,6 +203,40 @@
                     console.log(error);
                 });
         });
+
+        // Handle the form submission for deleting all annotations on a photo
+var deleteAllAnnotationsForms = document.querySelectorAll(".delete-all-annotations-form");
+deleteAllAnnotationsForms.forEach(function (form) {
+    form.addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent the form from submitting
+
+        var photoId = this.querySelector('input[name="photo_id"]').value;
+
+        fetch("delete_all_annotations.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "photo_id=" + encodeURIComponent(photoId),
+        })
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            if (data.status === "success") {
+                // Reload the page to reflect the changes
+                location.reload();
+            } else {
+                console.log(data.message);
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    });
+});
+
     </script>
+    
 </body>
 </html>
