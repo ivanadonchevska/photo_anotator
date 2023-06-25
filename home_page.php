@@ -2,9 +2,68 @@
 <html>
 <head>
     <title>Photo Uploader</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #photo-container {
+            display: flex;
+            flex-direction: column; /* Updated */
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        form input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        .photo-card {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .uploaded-photo {
+            width: 650px;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .delete-form {
+            margin-top: 10px;
+        }
+
+        .add-annotation-form {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Photo Uploader</h1>
+
+    <!-- Upload form -->
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="photo" accept="image/*" required>
+        <input type="submit" value="Upload">
+    </form>
 
     <!-- Display uploaded photos with annotations -->
     <div id="photo-container">
@@ -35,8 +94,8 @@
                 $annotationResult = $conn->query($annotationSql);
 
                 // Display the photo and annotations
-                echo '<div>';
-                echo '<img src="' . $photoPath . '" alt="Uploaded Photo" style="max-width: 500px;"><br>';
+                echo '<div class="photo-card">';
+                echo '<img src="' . $photoPath . '" alt="Uploaded Photo" class="uploaded-photo"><br>';
 
                 if ($annotationResult->num_rows > 0) {
                     echo '<ul>';
@@ -56,7 +115,7 @@
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
                 echo '<input type="submit" value="Delete">';
                 echo '</form>';
-                
+
                 // Add the add annotation form
                 echo '<form class="add-annotation-form" method="POST">';
                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
@@ -74,12 +133,6 @@
         $conn->close();
         ?>
     </div>
-
-    <!-- Upload form -->
-    <form id="upload-form" enctype="multipart/form-data">
-        <input type="file" name="photo" accept="image/*" required>
-        <input type="submit" value="Upload">
-    </form>
 
     <!-- JavaScript code -->
     <script>
@@ -101,7 +154,7 @@
                         var img = document.createElement("img");
                         img.src = data.photo_path;
                         img.alt = "Uploaded Photo";
-                        img.style.maxWidth = "500px";
+                        img.classList.add("uploaded-photo");
                         document.getElementById("photo-container").appendChild(img);
 
                         // Refresh the page after uploading
@@ -141,4 +194,4 @@
         });
     </script>
 </body>
-</html>
+</html> 
