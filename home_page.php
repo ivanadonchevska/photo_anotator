@@ -182,7 +182,11 @@
         $conn->close();
         ?>
     </div>
-
+    <div class="logout-container">
+        <form action="home_page.php" method="POST">
+            <button type="submit" name="logout">Logout</button>
+        </form>
+    </div>
     <!-- Upload form -->
     <form id="upload-form" enctype="multipart/form-data">
         <input type="file" name="photo" accept="image/*" required>
