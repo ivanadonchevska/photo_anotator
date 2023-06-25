@@ -1,0 +1,50 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+}
+
+#photo-container {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    margin-top: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+form input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.photo-card {
+    margin: 20px;
+    text-align: center;
+}
+
+.uploaded-photo {
+    width: 650px;
+    height: 400px;
+    object-fit: cover;
+}
+
+.delete-form {
+    margin-top: 10px;
+}
+
+.add-annotation-form {
+    margin-top: 10px;
+}
