@@ -1,8 +1,38 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Handle logout
+if (isset($_POST['logout'])) {
+    // Destroy the session
+    session_destroy();
+
+    // Redirect the user to the login page
+    header("Location: login.php");
+    exit;
+}
+// Configuration for database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "db_photo";
+
+// Create a connection to the database
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Photo Uploader and Home Page</title>
-    <link rel="stylesheet" type="text/css" href="home_page.css">
+    <link rel="stylesheet" type="text/css" href="home_page1.css">
     <script>
         // Handle the form submission for deleting a photo
         function deletePhoto(photoId) {
@@ -89,39 +119,28 @@
         }
     </script>
 </head>
+
 <body>
-    <h1>Photo Uploader and Home Page</h1>
+    <div class="logout-container">
+        <form action="home_page.php" method="POST">
+            <button type="submit" name="logout">Logout</button>
+        </form>
+    </div>
+    
+    <!-- Upload form -->
+    <div class="upload-form">
+        <h2>Upload a Photo</h2>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="photo" accept="image/*" required>
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+
+    <h1>Photo Feed</h1>
 
     <!-- Display uploaded photos with annotations -->
     <div id="photo-container">
         <?php
-        session_start();
-        if (!isset($_SESSION['username'])) {
-            header("Location: login.php");
-            exit;
-        }
-        
-        // Handle logout
-        if (isset($_POST['logout'])) {
-            // Destroy the session
-            session_destroy();
-        
-            // Redirect the user to the login page
-            header("Location: login.php");
-            exit;
-        }
-        // Configuration for database connection
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "db_photo";
-
-        // Create a connection to the database
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
         // Retrieve the uploaded photos from the database
         $sql = "SELECT * FROM photos";
         $result = $conn->query($sql);
@@ -136,7 +155,7 @@
                 $annotationResult = $conn->query($annotationSql);
 
                 // Display the photo and annotations
-                //echo '<div>';
+                echo '<div>';
                 //echo '<img src="' . $photoPath . '" alt="Uploaded Photo" style="max-width: 500px;"><br>';
 
                 if ($annotationResult->num_rows > 0) {
@@ -159,11 +178,6 @@
                 echo '<img src="' . $photoPath . '" alt="Uploaded Photo" style="max-width: 500px;"><br>';
                 echo '</a>';
                 echo '</div>';
-                // Add the delete button
-                echo '<form class="delete-form" method="POST">';
-                echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
-                echo '<input type="button" value="Delete" onclick="deletePhoto(' . $photoId . ')">';
-                echo '</form>';
 
                 // Add the add annotation form
                 echo '<form class="add-annotation-form" onsubmit="addAnnotation(this)">';
@@ -179,6 +193,12 @@
                 echo '<input type="submit" value="Delete All Annotations">';
                 echo '</form>';
 
+                 // Add the delete button
+                 echo '<form class="delete-form" method="POST">';
+                 echo '<input type="hidden" name="photo_id" value="' . $photoId . '">';
+                 echo '<input type="button" value="Delete Photo" onclick="deletePhoto(' . $photoId . ')">';
+                 echo '</form>';
+
                 echo '</div>';
             }
         } else {
@@ -189,17 +209,7 @@
         $conn->close();
         ?>
     </div>
-    <div class="logout-container">
-        <form action="home_page.php" method="POST">
-            <button type="submit" name="logout">Logout</button>
-        </form>
-    </div>
-    <!-- Upload form -->
-    <form id="upload-form" enctype="multipart/form-data">
-        <input type="file" name="photo" accept="image/*" required>
-        <input type="submit" value="Upload">
-    </form>
-
+   
     <!-- JavaScript code -->
     <script>
         // Handle the form submission
@@ -229,36 +239,36 @@
         });
 
         // Handle the form submission for deleting all annotations on a photo
-var deleteAllAnnotationsForms = document.querySelectorAll(".delete-all-annotations-form");
-deleteAllAnnotationsForms.forEach(function (form) {
-    form.addEventListener("submit", function (e) {
-        e.preventDefault(); // Prevent the form from submitting
+    var deleteAllAnnotationsForms = document.querySelectorAll(".delete-all-annotations-form");
+    deleteAllAnnotationsForms.forEach(function (form) {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent the form from submitting
 
-        var photoId = this.querySelector('input[name="photo_id"]').value;
+            var photoId = this.querySelector('input[name="photo_id"]').value;
 
-        fetch("delete_all_annotations.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: "photo_id=" + encodeURIComponent(photoId),
-        })
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            if (data.status === "success") {
-                // Reload the page to reflect the changes
-                location.reload();
-            } else {
-                console.log(data.message);
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
+            fetch("delete_all_annotations.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "photo_id=" + encodeURIComponent(photoId),
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (data.status === "success") {
+                    // Reload the page to reflect the changes
+                    location.reload();
+                } else {
+                    console.log(data.message);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         });
     });
-});
 
     </script>
     
