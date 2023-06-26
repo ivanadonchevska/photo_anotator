@@ -2,114 +2,138 @@
 
 /* Logout Container */
 .logout-container {
-    text-align: right;
-    padding: 10px;
-  }
-  
-  .logout-container button {
-    background-color: rgb(231, 216, 216);
-    cursor: pointer;
-    color: #000;
-    font-weight: bold;
-  }
-  
-  .logout-container button:hover {
-    color: #00ff00; /* Green color */
-  }
-  
-  /* Upload Form */
-  .upload-form {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
- h1 {
-    font-size: 40px;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  .upload-form input[type="file"] {
-    margin-bottom: 10px;
-    justify-content: center;
-  }
-  
-  /* Photo Container */
-  #photo-container {
-    margin-top: 20px;
-    text-align: center;
-    justify-content: center;
-  }
-  
-  #photo-container div {
-    margin-bottom: 20px;
-  }
-  
-  #photo-container img {
-    width: 100%;
-    height: auto;
-    max-width: none;
-
-  }
-  
-  .uploaded-photo {
-    width: 650px;
-    height: 400px;
-    object-fit: cover;
-    justify-content: center;
+  text-align: right;
+  padding: 10px;
 }
 
-  #photo-container ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  #photo-container ul li {
-    margin-bottom: 5px;
-  }
-  
-  #photo-container ul li button {
-    color: #111111;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  #photo-container ul li button:hover {
-    background-color: #71bb6a; 
-  }
-  
-  #photo-container .delete-form,
-  #photo-container .add-annotation-form,
-  #photo-container .delete-all-annotations-form {
-    margin-top: 10px;
-  }
-  
-  #photo-container .delete-form input[type="button"],
-  #photo-container .add-annotation-form input[type="submit"],
-  #photo-container .delete-all-annotations-form input[type="submit"] {
-    color: #161616;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  #photo-container .delete-form input[type="button"]:hover,
-  #photo-container .add-annotation-form input[type="submit"]:hover,
-  #photo-container .delete-all-annotations-form input[type="submit"]:hover {
-    background-color: #71bb6a; 
-  }
-  
-  #photo-container .add-annotation-form input[type="text"] {
-    margin-bottom: 5px;
-  }
-  
-  #photo-container .delete-all-annotations-form input[type="submit"] {
-    color: #100f0f;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  #photo-container .delete-all-annotations-form input[type="submit"]:hover {
-    background-color: #db5656; 
-  }
-  
+.logout-container button {
+background-color: #c2fbd7;
+border-radius: 100px;
+box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+color: green;
+cursor: pointer;
+display: inline-block;
+font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+padding: 7px 20px;
+text-align: center;
+text-decoration: none;
+transition: all 250ms;
+border: 0;
+font-size: 16px;
+user-select: none;
+-webkit-user-select: none;
+touch-action: manipulation;
+}
+
+.logout-container button:hover{
+box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+transform: scale(1.05) rotate(-1deg);
+}
+/*
+.logout-container button {
+  background-color: rgb(231, 216, 216);
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
+}
+
+.logout-container button:hover {
+  color: #00ff00; /* Green color */
+
+
+/* Upload Form */
+.upload-form {
+  margin-top: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.upload-form input[type="file"] {
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+/* Photo Container */
+#photo-container {
+  margin-top: 20px;
+  text-align: center;
+  justify-content: center;
+}
+
+#photo-container div {
+  margin-bottom: 20px;
+}
+
+#photo-container img {
+  width: 100%;
+  height: auto;
+  max-width: none;
+
+}
+
+.uploaded-photo {
+  width: 650px;
+  height: 400px;
+  object-fit: cover;
+  justify-content: center;
+}
+
+#photo-container ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#photo-container ul li {
+  margin-bottom: 5px;
+}
+
+#photo-container ul li button {
+  color: #111111;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#photo-container ul li button:hover {
+  background-color: #71bb6a; 
+}
+
+#photo-container .delete-form,
+#photo-container .add-annotation-form,
+#photo-container .delete-all-annotations-form {
+  margin-top: 10px;
+}
+
+#photo-container .delete-form input[type="button"],
+#photo-container .add-annotation-form input[type="submit"],
+#photo-container .delete-all-annotations-form input[type="submit"] {
+  color: #161616;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#photo-container .delete-form input[type="button"]:hover,
+#photo-container .add-annotation-form input[type="submit"]:hover,
+#photo-container .delete-all-annotations-form input[type="submit"]:hover {
+  background-color: #71bb6a; 
+}
+
+#photo-container .add-annotation-form input[type="text"] {
+  margin-bottom: 5px;
+}
+
+
+#photo-container .delete-all-annotations-form input[type="submit"] {
+  color: #100f0f;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#photo-container .delete-all-annotations-form input[type="submit"]:hover {
+  background-color: #db5656; 
+}

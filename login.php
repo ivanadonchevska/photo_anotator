@@ -71,21 +71,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="container">
-    <h2>Login</h2>
+    <h1>Login</h1>
     <form action="login.php" method="POST">
         
     <?php if (isset($errorMessage)): ?>
-            <p class="error-message"><?php echo $errorMessage; ?></p>
+            <p class="error"><?php echo $errorMessage; ?></p>
         <?php endif; ?>
         
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username" required placeholder="enter your username">
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required placeholder="enter your password">
         <button type="submit">Login</button>
 
     </form>
-    <p>Don't have an account? <a href="registration.php">Register</a></p>
+    <p>Don't have an account? <a class="link" href="registration.php">Register</a></p>
 </div>
 </body>
 </html>
