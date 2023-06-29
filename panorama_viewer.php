@@ -86,6 +86,27 @@ if ($stmt->fetch()) {
                 container: document.querySelector(\'#viewer\'),
                 panorama: \'' . $fullPath . '\',
             });
+
+            // Handle annotation selection
+            const annotations = ' . json_encode($annotations) . ';
+            document.querySelector(\'select[name="selected_annotations"]\').addEventListener(\'change\', function() {
+                const selectedAnnotations = Array.from(this.selectedOptions).map(option => option.value);
+                viewer.clearMarkers(); // Clear existing markers
+
+                // Display selected annotations as markers on the photo
+                for (const annotation of annotations) {
+                    const { id, x_coordinate, y_coordinate } = annotation;
+                    if (selectedAnnotations.includes(id)) {
+                        viewer.addMarker({
+                            id: id,
+                            x: x_coordinate,
+                            y: y_coordinate,
+                            tooltip: annotation.annotation_text,
+                            content: PhotoSphereViewer.MarkersTypes.COMMENT
+                        });
+                    }
+                }
+            });
         </script>
     </body>
     </html>';

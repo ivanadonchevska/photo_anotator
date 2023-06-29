@@ -121,15 +121,15 @@ if ($conn->connect_error) {
         </div>
         <!-- Add Annotation Form -->
         <form id="annotation-form" method="POST" action="add_annotation.php">
-        <label for="annotation-text">Annotation Text:</label>
-        <input type="text" id="annotation-text" name="annotation-text">
-        <label for="x-coordinate">X-coordinate:</label>
-        <input type="number" id="x-coordinate" name="x-coordinate">
-        <label for="y-coordinate">Y-coordinate:</label>
-        <input type="number" id="y-coordinate" name="y-coordinate">
-        <button type="submit">Add Annotation</button>
+            <label for="annotation-text">Annotation Text:</label>
+            <input type="text" id="annotation-text" name="annotation-text">
+            <label for="x-coordinate">X-coordinate:</label>
+            <input type="text" id="x-coordinate" name="x-coordinate">
+            <label for="y-coordinate">Y-coordinate:</label>
+            <input type="text" id="y-coordinate" name="y-coordinate">
+            <button type="submit">Add Annotation</button>
         </form>
-                    
+                            
         <!-- JavaScript code -->
         <script>
             // Handle the form submission
