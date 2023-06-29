@@ -5,36 +5,36 @@ $username = "root";
 $password = "";
 $dbname = "db_photo";
 
-// Get the form data
-$photoId = $_POST["photo_id"];
-$coordinates = $_POST["coordinates"];
-$additionalData = $_POST["additional_data"];
-
 // Create a connection to the database
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Insert the annotation into the database
-$sql = "INSERT INTO annotations (photo_id, coordinates, additional_column) VALUES ('$photoId', '$coordinates', '$additionalData')";
+// Retrieve the form data from the AJAX request
+$annotationText = $_POST['annotation-text'];
+$xCoordinate = $_POST['x-coordinate'];
+$yCoordinate = $_POST['y-coordinate'];
 
-if ($conn->query($sql) === TRUE) {
-    $response = array(
-        "status" => "success",
-        "message" => "Annotation added successfully."
-    );
+// Insert the annotation into the annotations table
+$insertAnnotationQuery = "INSERT INTO annotations (annotation_text, x_coordinate, y_coordinate) VALUES (?, ?, ?)";
+$statement = $conn->prepare($insertAnnotationQuery);
+$statement->bind_param("sdd", $annotationText, $xCoordinate, $yCoordinate);
+$statement->execute();
+
+// Check if the insertion was successful
+if ($statement->affected_rows > 0) {
+    // Annotation added successfully
+    $response = array("status" => "success");
 } else {
-    $response = array(
-        "status" => "error",
-        "message" => "Failed to add annotation: " . $conn->error
-    );
+    // Failed to add the annotation
+    $response = array("status" => "error", "message" => "Failed to add the annotation.");
 }
+
+// Send the response as JSON
+header("Content-Type: application/json");
+echo json_encode($response);
 
 // Close the database connection
 $conn->close();
-
-// Return the response as JSON
-header("Content-type: application/json");
-echo json_encode($response);
 ?>
