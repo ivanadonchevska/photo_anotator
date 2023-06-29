@@ -120,15 +120,7 @@ if ($conn->connect_error) {
             ?>
         </div>
         <!-- Add Annotation Form -->
-        <form id="annotation-form" method="POST" action="add_annotation.php">
-            <label for="annotation-text">Annotation Text:</label>
-            <input type="text" id="annotation-text" name="annotation-text">
-            <label for="x-coordinate">X-coordinate:</label>
-            <input type="text" id="x-coordinate" name="x-coordinate">
-            <label for="y-coordinate">Y-coordinate:</label>
-            <input type="text" id="y-coordinate" name="y-coordinate">
-            <button type="submit">Add Annotation</button>
-        </form>
+       
                             
         <!-- JavaScript code -->
         <script>
@@ -160,39 +152,6 @@ if ($conn->connect_error) {
         </script>
         
         <!-- JavaScript code -->
-        <<script>
-            // Handle the form submission
-            document.getElementById("annotation-form").addEventListener("submit", function (e) {
-                e.preventDefault(); // Prevent the form from submitting
-
-                // Get the form data
-                var formData = new FormData(this);
-
-                // Send the form data using AJAX
-                fetch("add_annotation.php", {
-                method: "POST",
-                body: formData,
-                })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (data) {
-                    if (data.status === "success") {
-                    console.log("Annotation added successfully!");
-                    // Clear the form fields
-                    document.getElementById("annotation-text").value = "";
-                    document.getElementById("x-coordinate").value = "";
-                    document.getElementById("y-coordinate").value = "";
-                    } else {
-                    console.log("Error: " + data.message);
-                    // You can handle the error case here, such as displaying an error message to the user
-                    }
-                })
-                .catch(function (error) {
-                    console.log("Error: " + error);
-                    // You can handle the error case here, such as displaying an error message to the user
-                });
-            });
-        </script>
+        
     </body>
 </html>

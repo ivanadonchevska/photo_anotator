@@ -54,31 +54,80 @@ if ($stmt->fetch()) {
     // Close the annotations statement
     $annotationsStmt->close();
 
-    // Display the photo as a panorama viewer using Photo Sphere Viewer
-    echo '
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css">
-    </head>
-    <body>
+   // Display the photo as a panorama viewer using Photo Sphere Viewer
+
+echo '
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css">
+    <link rel="stylesheet" href="panorama_viewer.css">
+    <style>
+        .annotation-marker {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="panorama-wrapper">
+        <div id="viewer" style="width: 80vw; height: 80vh;"></div>
+    </div>
+
+    <div class="annotations-wrapper">
         <!-- Annotation selection form -->
-        <form method="POST">
+        <form method="POST" class="annotation-selection-form">
             <label for="selected_annotations">Select Annotations:</label><br>
             <select name="selected_annotations[]" multiple>
-            ';
-    foreach ($annotations as $annotation) {
-        $selected = in_array($annotation['id'], $selectedAnnotations) ? 'selected' : '';
-        echo '<option value="' . $annotation['id'] . '" ' . $selected . '>' . $annotation['annotation_text'] . '</option>';
-    }
-    echo '
+        ';
+
+        // Display the available annotations as options in the selection form
+        foreach ($annotations as $annotation) {
+            $selected = in_array($annotation['id'], $selectedAnnotations) ? 'selected' : '';
+            echo '<option value="' . $annotation['id'] . '" ' . $selected . '>' . $annotation['annotation_text'] . '</option>';
+        }
+
+        echo '
             </select><br>
             <input type="submit" value="Submit">
         </form>
-    
-        <div id="container" style="display: flex; justify-content: center; align-items: center;">
-            <div id="viewer" style="width: 80vw; height: 80vh;"></div>
-        </div>
+    </div>
+    <div id="annotation-form" class="annotation-form-container">
+        <form id="add-annotation-form" method="POST" action="add_annotation.php">
+            <label for="annotation-text">Annotation Text:</label>
+            <input type="text" id="annotation-text" name="annotation-text">
+            <label for="x-coordinate">X-coordinate:</label>
+            <input type="text" id="x-coordinate" name="x-coordinate">
+            <label for="y-coordinate">Y-coordinate:</label>
+            <input type="text" id="y-coordinate" name="y-coordinate">
+            <button type="submit">Add Annotation</button>
+        </form>
+    </div>';
+
+    // Display the selected annotations as markers on the photo
+    foreach ($annotations as $annotation) {
+        if (in_array($annotation['id'], $selectedAnnotations)) {
+            $x = $annotation['x_coordinate'];
+            $y = $annotation['y_coordinate'];
+
+            // Adjust the coordinates to ensure they are within the bounds of the photo
+            $x = max(0, min(1, $x)); // Clamp x coordinate between 0 and 1
+            $y = max(0, min(1, $y)); // Clamp y coordinate between 0 and 1
+
+            // Convert the adjusted coordinates to percentages for positioning on the photo
+            $xPercent = $x * 100;
+            $yPercent = $y * 100;
+
+            // Display the annotation marker
+            echo '<div class="annotation-marker" style="left: ' . $xPercent . '%; top: ' . $yPercent . '%;">' . $annotation['annotation_text'] . '</div>';
+        }
+    }
+
+    echo '
         <script src="https://cdn.jsdelivr.net/npm/three/build/three.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.js"></script>
         <script>
@@ -86,28 +135,56 @@ if ($stmt->fetch()) {
                 container: document.querySelector(\'#viewer\'),
                 panorama: \'' . $fullPath . '\',
             });
-
-            // Handle annotation selection
-            const annotations = ' . json_encode($annotations) . ';
-            document.querySelector(\'select[name="selected_annotations"]\').addEventListener(\'change\', function() {
-                const selectedAnnotations = Array.from(this.selectedOptions).map(option => option.value);
-                viewer.clearMarkers(); // Clear existing markers
-
-                // Display selected annotations as markers on the photo
-                for (const annotation of annotations) {
-                    const { id, x_coordinate, y_coordinate } = annotation;
-                    if (selectedAnnotations.includes(id)) {
-                        viewer.addMarker({
-                            id: id,
-                            x: x_coordinate,
-                            y: y_coordinate,
-                            tooltip: annotation.annotation_text,
-                            content: PhotoSphereViewer.MarkersTypes.COMMENT
-                        });
-                    }
-                }
-            });
         </script>
+        
+        <script>
+        // Handle the form submission
+        document.getElementById("add-annotation-form").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent the form from submitting
+
+            // Get the form data
+            var formData = new FormData(this);
+
+            // Send the form data using AJAX
+            fetch("add_annotation.php", {
+                method: "POST",
+                body: formData,
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (data.status === "success") {
+                    console.log("Annotation added successfully!");
+
+                    // Clear the form fields
+                    document.getElementById("annotation-text").value = "";
+                    document.getElementById("x-coordinate").value = "";
+                    document.getElementById("y-coordinate").value = "";
+
+                    // Update the annotations container with the new annotation
+                    var annotationsContainer = document.querySelector(".annotations-wrapper");
+
+                    // Create a new annotation marker
+                    var annotationMarker = document.createElement("div");
+                    annotationMarker.className = "annotation-marker";
+                    annotationMarker.innerText = formData.get("annotation-text"); // Use the entered annotation text
+                    annotationMarker.style.left = formData.get("x-coordinate") + "%";
+                    annotationMarker.style.top = formData.get("y-coordinate") + "%";
+
+                    // Append the annotation marker to the annotations container
+                    annotationsContainer.appendChild(annotationMarker);
+                } else {
+                    console.log("Error: " + data.message);
+                    // You can handle the error case here, such as displaying an error message to the user
+                }
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                // You can handle the error case here, such as displaying an error message to the user
+            });
+        });
+    </script>
     </body>
     </html>';
 } else {
