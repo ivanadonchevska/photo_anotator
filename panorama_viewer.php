@@ -46,6 +46,16 @@ if ($stmt->fetch()) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Retrieve the selected annotations from the form submission
         $selectedAnnotations = $_POST['selected_annotations'];
+
+        // Check if the delete annotation button was clicked
+        if (isset($_POST['delete_annotation'])) {
+            // Delete the selected annotations from the database
+            foreach ($selectedAnnotations as $annotationId) {
+                $deleteStmt = $conn->prepare("DELETE FROM annotations WHERE id = ?");
+                $deleteStmt->bind_param("i", $annotationId);
+                $deleteStmt->execute();
+            }
+        }
     } else {
         // Set default selected annotations (if any)
         $selectedAnnotations = array();
@@ -54,61 +64,62 @@ if ($stmt->fetch()) {
     // Close the annotations statement
     $annotationsStmt->close();
 
-   // Display the photo as a panorama viewer using Photo Sphere Viewer
+    // Display the photo as a panorama viewer using Photo Sphere Viewer
+    echo '
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css">
+        <link rel="stylesheet" href="panorama_viewer.css">
+        <style>
+            .annotation-marker {
+                position: absolute;
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 4px;
+                border-radius: 4px;
+                font-size: 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="panorama-wrapper">
+            <div id="viewer" style="width: 80vw; height: 80vh;"></div>
+        </div>
 
-echo '
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css">
-    <link rel="stylesheet" href="panorama_viewer.css">
-    <style>
-        .annotation-marker {
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 4px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-    </style>
-</head>
-<body>
-    <div class="panorama-wrapper">
-        <div id="viewer" style="width: 80vw; height: 80vh;"></div>
-    </div>
+        <div class="annotations-wrapper">
+            <!-- Annotation selection form -->
+            <form method="POST" class="annotation-selection-form">
+                <label for="selected_annotations">Select Annotations:</label><br>
+                <select name="selected_annotations[]" multiple>
+            ';
 
-    <div class="annotations-wrapper">
-        <!-- Annotation selection form -->
-        <form method="POST" class="annotation-selection-form">
-            <label for="selected_annotations">Select Annotations:</label><br>
-            <select name="selected_annotations[]" multiple>
-        ';
+    // Display the available annotations as options in the selection form
+    foreach ($annotations as $annotation) {
+        $selected = in_array($annotation['id'], $selectedAnnotations) ? 'selected' : '';
+        echo '<option value="' . $annotation['id'] . '" ' . $selected . '>' . $annotation['annotation_text'] . '</option>';
+    }
 
-        // Display the available annotations as options in the selection form
-        foreach ($annotations as $annotation) {
-            $selected = in_array($annotation['id'], $selectedAnnotations) ? 'selected' : '';
-            echo '<option value="' . $annotation['id'] . '" ' . $selected . '>' . $annotation['annotation_text'] . '</option>';
-        }
-
-        echo '
-            </select><br>
-            <input class="add_btn" type="submit" value="Submit">
-        </form>
-    </div>
-    <div id="annotation-form" class="annotation-form-container">
-        <form id="add-annotation-form" method="POST" action="add_annotation.php">
-            <label for="annotation-text">Annotation Text:</label>
-            <input type="text" id="annotation-text" name="annotation-text">
-            <label for="x-coordinate">X-coordinate:</label>
-            <input type="text" id="x-coordinate" name="x-coordinate">
-            <label for="y-coordinate">Y-coordinate:</label>
-            <input type="text" id="y-coordinate" name="y-coordinate">
-            <input class="add_btn" type="submit" value="Add annotation">
-        </form>
-    </div>';
+    echo '
+                </select><br>
+                <input class="add_btn" type="submit" value="Submit">
+                <input class="delete_btn" type="submit" name="delete_annotation" value="Delete Annotation">
+            </form>
+        </div>
+        <div id="annotation-form" class="annotation-form-container">
+            <form id="add-annotation-form" method="POST" action="add_annotation.php">
+                <label for="annotation-text">Annotation Text:</label>
+                <input type="text" id="annotation-text" name="annotation-text">
+                <label for="x-coordinate">X-coordinate:</label>
+                <input type="text" id="x-coordinate" name="x-coordinate">
+                <label for="y-coordinate">Y-coordinate:</label>
+                <input type="text" id="y-coordinate" name="y-coordinate">
+                <input class="add_btn" type="submit" value="Add annotation">
+            </form>
+        </div>';
 
     // Display the selected annotations as markers on the photo
+    echo '<div id="selected-annotations">';
     foreach ($annotations as $annotation) {
         if (in_array($annotation['id'], $selectedAnnotations)) {
             $x = $annotation['x_coordinate'];
@@ -126,6 +137,7 @@ echo '
             echo '<div class="annotation-marker" style="left: ' . $xPercent . '%; top: ' . $yPercent . '%;">' . $annotation['annotation_text'] . '</div>';
         }
     }
+    echo '</div>';
 
     echo '
         <script src="https://cdn.jsdelivr.net/npm/three/build/three.min.js"></script>
@@ -136,57 +148,100 @@ echo '
                 panorama: \'' . $fullPath . '\',
             });
         </script>
-        
+
         <script>
-        // Handle the form submission
-        document.getElementById("add-annotation-form").addEventListener("submit", function (e) {
-            e.preventDefault(); // Prevent the form from submitting
+            // Handle the form submission
+            document.getElementById("add-annotation-form").addEventListener("submit", function (e) {
+                e.preventDefault(); // Prevent the form from submitting
 
-            // Get the form data
-            var formData = new FormData(this);
+                // Get the form data
+                var formData = new FormData(this);
 
-            // Send the form data using AJAX
-            fetch("add_annotation.php", {
-                method: "POST",
-                body: formData,
-            })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                if (data.status === "success") {
-                    console.log("Annotation added successfully!");
+                // Send the form data using AJAX
+                fetch("add_annotation.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        if (data.status === "success") {
+                            console.log("Annotation added successfully!");
 
-                    // Clear the form fields
-                    document.getElementById("annotation-text").value = "";
-                    document.getElementById("x-coordinate").value = "";
-                    document.getElementById("y-coordinate").value = "";
+                            // Clear the form fields
+                            document.getElementById("annotation-text").value = "";
+                            document.getElementById("x-coordinate").value = "";
+                            document.getElementById("y-coordinate").value = "";
 
-                    // Update the annotations container with the new annotation
-                    var annotationsContainer = document.querySelector(".annotations-wrapper");
+                            // Update the annotations container with the new annotation
+                            var annotationsContainer = document.querySelector(".annotations-wrapper");
 
-                    // Create a new annotation marker
-                    var annotationMarker = document.createElement("div");
-                    annotationMarker.className = "annotation-marker";
-                    annotationMarker.innerText = formData.get("annotation-text"); // Use the entered annotation text
-                    annotationMarker.style.left = formData.get("x-coordinate") + "%";
-                    annotationMarker.style.top = formData.get("y-coordinate") + "%";
+                            // Create a new annotation marker
+                            var annotationMarker = document.createElement("div");
+                            annotationMarker.className = "annotation-marker";
+                            annotationMarker.innerText = formData.get("annotation-text"); // Use the entered annotation text
+                            annotationMarker.style.left = formData.get("x-coordinate") + "%";
+                            annotationMarker.style.top = formData.get("y-coordinate") + "%";
 
-                    // Append the annotation marker to the annotations container
-                    annotationsContainer.appendChild(annotationMarker);
-                } else {
-                    console.log("Error: " + data.message);
-                    // You can handle the error case here, such as displaying an error message to the user
-                }
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-                // You can handle the error case here, such as displaying an error message to the user
+                            // Append the annotation marker to the annotations container
+                            annotationsContainer.appendChild(annotationMarker);
+                        } else {
+                            console.log("Error: " + data.message);
+                            // You can handle the error case here, such as displaying an error message to the user
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log("Error: " + error);
+                        // You can handle the error case here, such as displaying an error message to the user
+                    });
             });
-        });
-    </script>
+
+            // Handle the form submission for deleting an annotation
+            document.querySelector(".annotation-selection-form").addEventListener("submit", function (e) {
+                e.preventDefault(); // Prevent the form from submitting
+
+                // Retrieve the selected annotations from the form
+                var selectedAnnotations = Array.from(this.elements["selected_annotations[]"].selectedOptions).map(option => option.value);
+
+                // Send the selected annotations to the server for deletion
+                fetch("delete_annotation.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ selectedAnnotations: selectedAnnotations }),
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        if (data.status === "success") {
+                            console.log("Annotation deleted successfully!");
+
+                            // Remove the deleted annotation markers from the viewer
+                            var annotationMarkers = document.querySelectorAll(".annotation-marker");
+                            for (var i = 0; i < annotationMarkers.length; i++) {
+                                var marker = annotationMarkers[i];
+                                var annotationId = marker.dataset.annotationId;
+                                if (selectedAnnotations.includes(annotationId)) {
+                                    marker.remove();
+                                }
+                            }
+                        } else {
+                            console.log("Error: " + data.message);
+                            // You can handle the error case here, such as displaying an error message to the user
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log("Error: " + error);
+                        // You can handle the error case here, such as displaying an error message to the user
+                    });
+            });
+            
+        </script>
     </body>
-    </html>';
+</html>';
 } else {
     echo "Photo not found.";
 }
