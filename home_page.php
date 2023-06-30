@@ -77,11 +77,15 @@ if ($conn->connect_error) {
         <div class="upload-form">
             <h2>Upload a Photo</h2>
             <form id="upload-form" enctype="multipart/form-data">
-                <input type="file" name="photo" accept="image/*" required>
-                <input type="submit" value="Upload">
+                <label for="photo" class="file-label">
+                    <span>Choose Photo</span>
+                    <input type="file" name="photo" id="photo" accept="image/*" required>
+                </label>
+            <input class="btn-upload" type="submit" value="Upload">
             </form>
         </div>
 
+        <br>
         <h1>Photo Feed</h1>
 
         <!-- Display uploaded photos -->

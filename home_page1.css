@@ -1,4 +1,9 @@
 /* home_page.css */
+body {
+  background-color: #9eabab;
+}
+
+
 
 /* Logout Container */
 .logout-container {
@@ -29,23 +34,106 @@ touch-action: manipulation;
 box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
 transform: scale(1.05) rotate(-1deg);
 }
-/*
-.logout-container button {
-  background-color: rgb(231, 216, 216);
-  cursor: pointer;
-  color: #000;
-  font-weight: bold;
-}
-
-.logout-container button:hover {
-  color: #00ff00; /* Green color */
-
 
 /* Upload Form */
 .upload-form {
+  margin: 0 auto;
   margin-top: 20px;
   text-align: center;
+  max-width: 400px;
+  padding: 15px;
+  background-color: #6f9498;
+  border-radius: 15px;
+  border-style: solid;
+  border-color: rgb(28, 72, 68);
+  border-width: 1px;
 }
+
+.btn-upload {
+  background-color: #686a6a;
+  border-radius: 5px;
+  box-shadow: rgba(103, 110, 106, 0.2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(129, 129, 129, 0.15) 0 2px 4px,rgba(160, 160, 160, 0.15) 0 4px 8px,rgba(116, 116, 116, 0.15) 0 8px 16px,rgba(8, 8, 8, 0.15) 0 16px 32px;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 7px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 15px;
+  border-color: rgb(28, 72, 68);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.btn-upload:hover{
+  box-shadow: rgba(0, 0, 0, 0.35) 0 -25px 18px -14px inset,rgba(65, 65, 65, 0.25) 0 1px 2px,rgba(111, 111, 111, 0.25) 0 2px 4px,rgba(177, 177, 177, 0.25) 0 4px 8px,rgba(169, 169, 169, 0.25) 0 8px 16px,rgba(60, 59, 59, 0.25) 0 16px 32px;
+  transform: scale(1.05) rotate(-1deg);
+  }
+
+
+.file-label {
+  background-color: #c2fbec;
+  border-radius: 9px;
+  box-shadow: rgba(44, 187, 139, 0.2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+  color: green;
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.file-label:hover{
+  box-shadow: rgba(44, 187, 173, 0.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+  transform: scale(1.05) rotate(-1deg);
+}
+  
+  .file-label span {
+    display: inline-block;
+  }
+  
+  input[type="file"] {
+    display: none;
+  }
+  /*
+
+.choosepic {
+  background-color: #686a6a;
+  border-radius: 5px;
+  box-shadow: rgba(103, 110, 106, 0.2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(129, 129, 129, 0.15) 0 2px 4px,rgba(160, 160, 160, 0.15) 0 4px 8px,rgba(116, 116, 116, 0.15) 0 8px 16px,rgba(8, 8, 8, 0.15) 0 16px 32px;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 7px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 15px;
+  border-color: rgb(28, 72, 68);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation; 
+}
+
+.choosepic:hover{
+  box-shadow: rgba(0, 0, 0, 0.35) 0 -25px 18px -14px inset,rgba(65, 65, 65, 0.25) 0 1px 2px,rgba(111, 111, 111, 0.25) 0 2px 4px,rgba(177, 177, 177, 0.25) 0 4px 8px,rgba(169, 169, 169, 0.25) 0 8px 16px,rgba(60, 59, 59, 0.25) 0 16px 32px;
+  transform: scale(1.05) rotate(-1deg);
+  }
+
+  */
 
 h1 {
   font-size: 40px;
@@ -60,7 +148,7 @@ h1 {
 
 /* Photo Container */
 #photo-container {
-  margin-top: 20px;
+  margin-top: 30px;
   text-align: center;
   justify-content: center;
 }
@@ -103,26 +191,37 @@ h1 {
   background-color: #71bb6a; 
 }
 
-#photo-container .delete-form,
-#photo-container .add-annotation-form,
-#photo-container .delete-all-annotations-form {
+#photo-container .delete-form {
   margin-top: 10px;
 }
 
-#photo-container .delete-form input[type="button"],
-#photo-container .add-annotation-form input[type="submit"],
-#photo-container .delete-all-annotations-form input[type="submit"] {
-  color: #161616;
+#photo-container .delete-form input[type="button"] {
+  background-color: #7b7b7b;
+  border-radius: 9px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 -25px 18px -14px inset,rgba(187, 44, 44, 0.15) 0 1px 2px,rgba(187, 44, 44, 0.15) 0 2px 4px,rgba(187, 44, 44, 0.15) 0 4px 8px,rgba(187, 44, 44, 0.15) 0 8px 16px,rgba(137, 29, 29, 0.15) 0 16px 32px;
+  color: rgb(177, 10, 10);
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
   padding: 5px 10px;
   cursor: pointer;
 }
 
-#photo-container .delete-form input[type="button"]:hover,
-#photo-container .add-annotation-form input[type="submit"]:hover,
-#photo-container .delete-all-annotations-form input[type="submit"]:hover {
-  background-color: #71bb6a; 
+#photo-container .delete-form input[type="button"]:hover {
+  box-shadow: rgb(239, 7, 7) 0 -25px 18px -14px inset,rgba(91, 10, 10, 0.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+  transform: scale(1.05) rotate(-1deg);
+  color:rgb(81, 1, 1)
 }
-
+/*
 #photo-container .add-annotation-form input[type="text"] {
   margin-bottom: 5px;
 }
@@ -137,3 +236,4 @@ h1 {
 #photo-container .delete-all-annotations-form input[type="submit"]:hover {
   background-color: #db5656; 
 }
+*/
