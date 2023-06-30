@@ -33,6 +33,16 @@ border-width: 1px;
   top: 20px; 
   left: 20px; 
   text-align: left;
+  margin: 0 auto;
+  margin-top: 20px;
+  text-align: center;
+  max-width: 400px;
+  padding: 15px;
+  background-color: #6f9498;
+  border-radius: 15px;
+  border-style: solid;
+  border-color: rgb(28, 72, 68);
+  border-width: 1px;
 }
 
 #add-annotation-form {
@@ -49,12 +59,43 @@ margin-bottom: 0;
   align-items: center;
   justify-content: center;
   margin-top: 40px;
-  background-color: #898686;
-  border-radius: 15px;
-  border-color: rgb(0, 0, 0);
   max-width: 1100px;
   padding: 10px;
+  background-color: #6f9498;
+  border-radius: 15px;
+  border-style: solid;
+  border-color: rgb(28, 72, 68);
+  border-width: 1px;
 }
+/*
+.annotation-form-container .add_btn input[type="button"]{
+background-color: #686a6a;
+border-radius: 5px;
+box-shadow: rgba(103, 110, 106, 0.2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(129, 129, 129, 0.15) 0 2px 4px,rgba(160, 160, 160, 0.15) 0 4px 8px,rgba(116, 116, 116, 0.15) 0 8px 16px,rgba(8, 8, 8, 0.15) 0 16px 32px;
+color: rgb(0, 0, 0);
+cursor: pointer;
+display: inline-block;
+padding: 2px 7px;
+text-align: center;
+text-decoration: none;
+transition: all 250ms;
+border-style: solid;
+border-width: 1px;
+font-size: 15px;
+border-color: rgb(28, 72, 68);
+user-select: none;
+-webkit-user-select: none;
+touch-action: manipulation;
+}
+
+.annotation-form-container .add_btn input[type="button"]:hover {
+box-shadow: rgba(0, 0, 0, 0.35) 0 -25px 18px -14px inset,rgba(65, 65, 65, 0.25) 0 1px 2px,rgba(111, 111, 111, 0.25) 0 2px 4px,rgba(177, 177, 177, 0.25) 0 4px 8px,rgba(169, 169, 169, 0.25) 0 8px 16px,rgba(60, 59, 59, 0.25) 0 16px 32px;
+transform: scale(1.05) rotate(-1deg);
+}
+
+
+*/
+
 /*
 
 .button {

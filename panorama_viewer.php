@@ -93,7 +93,7 @@ echo '
 
         echo '
             </select><br>
-            <input type="submit" value="Submit">
+            <input class="add_btn" type="submit" value="Submit">
         </form>
     </div>
     <div id="annotation-form" class="annotation-form-container">
@@ -104,7 +104,7 @@ echo '
             <input type="text" id="x-coordinate" name="x-coordinate">
             <label for="y-coordinate">Y-coordinate:</label>
             <input type="text" id="y-coordinate" name="y-coordinate">
-            <button type="submit">Add Annotation</button>
+            <input class="add_btn" type="submit" value="Add annotation">
         </form>
     </div>';
 
