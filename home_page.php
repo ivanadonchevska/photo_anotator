@@ -113,7 +113,7 @@ if ($conn->connect_error) {
                     echo '<input type="button" value="Delete Photo" onclick="deletePhoto(' . $photoId . ')">';
                     echo '</form>';
 
-                    echo '</div>';
+
                 }
             } else {
                 echo '<p>No uploaded photos found.</p>';

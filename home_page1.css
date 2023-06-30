@@ -151,16 +151,20 @@ h1 {
   margin-top: 30px;
   text-align: center;
   justify-content: center;
+  align-items: center;
 }
 
 #photo-container div {
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 #photo-container img {
   width: 100%;
   height: auto;
   max-width: none;
+  align-items: center;
+  justify-content: center;
 
 }
 
@@ -169,12 +173,15 @@ h1 {
   height: 400px;
   object-fit: cover;
   justify-content: center;
+  align-items: center;
 }
 
 #photo-container ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  align-items: center;
+  justify-content: center;
 }
 
 #photo-container ul li {
