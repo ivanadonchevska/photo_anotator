@@ -108,8 +108,8 @@ if ($stmt->fetch()) {
 
     echo '
                 </ul>
-                <input class="submit_btn"  type="submit" name="submit">Submit Annotation</button>
-                <input class="delete_btn"  type="submit" name="delete_annotation">Delete Selected Annotation(s)</button>
+                <input class="submit_btn"  type="submit" name="submit"value="Submit Annotation"></button>
+                <input class="delete_btn"  type="submit" name="delete_annotation" value="Delete Selected Annotation(s)"></button>
             </form>
         </div>
 
@@ -121,7 +121,7 @@ if ($stmt->fetch()) {
                 <input type="text" id="x-coordinate" name="x-coordinate">
                 <label for="y-coordinate">Y-coordinate:</label>
                 <input type="text" id="y-coordinate" name="y-coordinate">
-                <input class="add_btn" button type="submit">Add Annotation</button>
+                <input class="add_btn" button type="submit" value="Add Annotation"></button>
             </form>
         </div>';
 
