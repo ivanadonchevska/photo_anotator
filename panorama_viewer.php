@@ -150,52 +150,55 @@ if ($stmt->fetch()) {
         </script>
 
         <script>
-            // Handle the form submission
-            document.getElementById("add-annotation-form").addEventListener("submit", function (e) {
-                e.preventDefault(); // Prevent the form from submitting
-
-                // Get the form data
-                var formData = new FormData(this);
-
-                // Send the form data using AJAX
-                fetch("add_annotation.php", {
-                    method: "POST",
-                    body: formData,
-                })
-                    .then(function (response) {
-                        return response.json();
-                    })
-                    .then(function (data) {
-                        if (data.status === "success") {
-                            console.log("Annotation added successfully!");
-
-                            // Clear the form fields
-                            document.getElementById("annotation-text").value = "";
-                            document.getElementById("x-coordinate").value = "";
-                            document.getElementById("y-coordinate").value = "";
-
-                            // Update the annotations container with the new annotation
-                            var annotationsContainer = document.querySelector(".annotations-wrapper");
-
-                            // Create a new annotation marker
-                            var annotationMarker = document.createElement("div");
-                            annotationMarker.className = "annotation-marker";
-                            annotationMarker.innerText = formData.get("annotation-text"); // Use the entered annotation text
-                            annotationMarker.style.left = formData.get("x-coordinate") + "%";
-                            annotationMarker.style.top = formData.get("y-coordinate") + "%";
-
-                            // Append the annotation marker to the annotations container
-                            annotationsContainer.appendChild(annotationMarker);
-                        } else {
-                            console.log("Error: " + data.message);
-                            // You can handle the error case here, such as displaying an error message to the user
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log("Error: " + error);
-                        // You can handle the error case here, such as displaying an error message to the user
-                    });
+        // Handle the form submission for adding annotations
+        document.querySelector(".annotation-selection-form").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent the form from submitting
+        
+            // Retrieve the selected annotations from the form
+            var selectedAnnotations = Array.from(this.elements["selected_annotations[]"].selectedOptions).map(option => option.value);
+        
+            // Add the selected annotations to their respective coordinates on the panorama
+            selectedAnnotations.forEach(function (annotationId) {
+                var annotation = findAnnotationById(annotationId);
+                if (annotation) {
+                    var x = annotation.x_coordinate;
+                    var y = annotation.y_coordinate;
+        
+                    // Adjust the coordinates to ensure they are within the bounds of the photo
+                    x = Math.max(0, Math.min(1, x)); // Clamp x coordinate between 0 and 1
+                    y = Math.max(0, Math.min(1, y)); // Clamp y coordinate between 0 and 1
+        
+                    // Convert the adjusted coordinates to percentages for positioning on the photo
+                    var xPercent = x * 100;
+                    var yPercent = y * 100;
+        
+                    // Display the annotation marker
+                    var annotationMarker = document.createElement("div");
+                    annotationMarker.className = "annotation-marker";
+                    annotationMarker.innerText = annotation.annotation_text;
+                    annotationMarker.style.left = xPercent + "%";
+                    annotationMarker.style.top = yPercent + "%";
+                    document.querySelector(".panorama-wrapper").appendChild(annotationMarker);
+                }
             });
+        
+            // Clear the selection in the form
+            var selectElement = document.querySelector("select[name="selected_annotations[]"]);
+            for (var i = 0; i < selectElement.options.length; i++) {
+                selectElement.options[i].selected = false;
+            }
+        });
+        
+        // Find an annotation by its ID
+        function findAnnotationById(annotationId) {
+            for (var i = 0; i < annotations.length; i++) {
+                if (annotations[i].id === annotationId) {
+                    return annotations[i];
+                }
+            }
+            return null;
+        }
+        
 
             // Handle the form submission for deleting an annotation
             document.querySelector(".annotation-selection-form").addEventListener("submit", function (e) {
