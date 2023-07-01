@@ -57,6 +57,13 @@ if ($stmt->fetch()) {
             }
         }
 
+        // Check if the delete all annotations button was clicked
+        if (isset($_POST['delete_all_annotations'])) {
+            // Delete all annotations from the database
+            $deleteAllStmt = $conn->prepare("DELETE FROM annotations");
+            $deleteAllStmt->execute();
+        }
+
     } else {
         // Set default selected annotations (if any)
         $selectedAnnotations = array();
@@ -105,6 +112,7 @@ if ($stmt->fetch()) {
                 </select><br>
                 <input class="add_btn" type="submit" value="Submit">
                 <input class="delete_btn" type="submit" name="delete_annotation" value="Delete Annotation">
+                <input class="delete-all-btn" type="submit" name="delete_all_annotations" value="Delete All Annotations">
             </form>
         </div>
         <div id="annotation-form" class="annotation-form-container">
@@ -239,6 +247,79 @@ if ($stmt->fetch()) {
                         // You can handle the error case here, such as displaying an error message to the user
                     });
             });
+
+            // Handle the form submission for deleting all annotations
+            document.querySelector(".annotation-selection-form").addEventListener("Delete All Annotations", function (e) {
+                e.preventDefault(); // Prevent the form from submitting
+
+                // Retrieve the selected annotations from the form
+                var selectedAnnotations = Array.from(this.elements["selected_annotations[]"].selectedOptions).map(option => option.value);
+
+                // Check if the delete all annotations button was clicked
+                if (this.elements["delete_all_annotations"].clicked) {
+                    // Send a request to delete all annotations
+                    fetch("delete_all_annotations.php", {
+                        method: "POST"
+                    })
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            if (data.status === "success") {
+                                console.log("All annotations deleted successfully!");
+
+                                // Remove all annotation markers from the viewer
+                                var annotationMarkers = document.querySelectorAll(".annotation-marker");
+                                for (var i = 0; i < annotationMarkers.length; i++) {
+                                    var marker = annotationMarkers[i];
+                                    marker.remove();
+                                }
+                            } else {
+                                console.log("Error: " + data.message);
+                                // You can handle the error case here, such as displaying an error message to the user
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log("Error: " + error);
+                            // You can handle the error case here, such as displaying an error message to the user
+                        });
+                } else {
+                    // Send the selected annotations to the server for deletion
+                    fetch("delete_annotation.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ selectedAnnotations: selectedAnnotations }),
+                    })
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            if (data.status === "success") {
+                                console.log("Annotation deleted successfully!");
+
+                                // Remove the deleted annotation markers from the viewer
+                                var annotationMarkers = document.querySelectorAll(".annotation-marker");
+                                for (var i = 0; i < annotationMarkers.length; i++) {
+                                    var marker = annotationMarkers[i];
+                                    var annotationId = marker.dataset.annotationId;
+                                    if (selectedAnnotations.includes(annotationId)) {
+                                        marker.remove();
+                                    }
+                                }
+                            } else {
+                                console.log("Error: " + data.message);
+                                // You can handle the error case here, such as displaying an error message to the user
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log("Error: " + error);
+                            // You can handle the error case here, such as displaying an error message to the user
+                        });
+                }
+            });
+
             
         </script>
     </body>
