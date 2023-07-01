@@ -1,6 +1,8 @@
 <?php
 $photoId = $_GET['id'];
 
+// TREBA EDIIIIT - ovoa go dodadoh za da saka da se committnee
+
 // Database connection configuration
 $host = "localhost";
 $username = "root";
@@ -249,3 +251,4 @@ if ($stmt->fetch()) {
 $stmt->close();
 $conn->close();
 ?>
+
