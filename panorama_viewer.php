@@ -1,8 +1,6 @@
 <?php
 $photoId = $_GET['id'];
 
-// TREBA EDIIIIT - ovoa go dodadoh za da saka da se committnee
-
 // Database connection configuration
 $host = "localhost";
 $username = "root";
@@ -58,6 +56,7 @@ if ($stmt->fetch()) {
                 $deleteStmt->execute();
             }
         }
+
     } else {
         // Set default selected annotations (if any)
         $selectedAnnotations = array();
@@ -116,12 +115,12 @@ if ($stmt->fetch()) {
                 <input type="text" id="x-coordinate" name="x-coordinate">
                 <label for="y-coordinate">Y-coordinate:</label>
                 <input type="text" id="y-coordinate" name="y-coordinate">
-                <input class="add_btn" type="submit" value="Add annotation">
+                <button type="submit">Add Annotation</button>
             </form>
         </div>';
 
     // Display the selected annotations as markers on the photo
-    echo '<div id="selected-annotations">';
+    // echo '<div id="selected-annotations">'; ------------------
     foreach ($annotations as $annotation) {
         if (in_array($annotation['id'], $selectedAnnotations)) {
             $x = $annotation['x_coordinate'];
@@ -139,7 +138,7 @@ if ($stmt->fetch()) {
             echo '<div class="annotation-marker" style="left: ' . $xPercent . '%; top: ' . $yPercent . '%;">' . $annotation['annotation_text'] . '</div>';
         }
     }
-    echo '</div>';
+    // echo '</div>'; ------------------------
 
     echo '
         <script src="https://cdn.jsdelivr.net/npm/three/build/three.min.js"></script>
@@ -200,7 +199,7 @@ if ($stmt->fetch()) {
             });
 
             // Handle the form submission for deleting an annotation
-            document.querySelector(".annotation-selection-form").addEventListener("submit", function (e) {
+            document.querySelector(".annotation-selection-form").addEventListener("Delete Annotation", function (e) {
                 e.preventDefault(); // Prevent the form from submitting
 
                 // Retrieve the selected annotations from the form
