@@ -99,22 +99,30 @@ if ($stmt->fetch()) {
             <!-- Annotation selection form -->
             <form method="POST" class="annotation-selection-form">
                 <label for="selected_annotations">Select Annotations:</label><br>
-                <select name="selected_annotations[]" multiple>
-            ';
+                <ul>';
 
     // Display the available annotations as options in the selection form
     foreach ($annotations as $annotation) {
-        $selected = in_array($annotation['id'], $selectedAnnotations) ? 'selected' : '';
-        echo '<option value="' . $annotation['id'] . '" ' . $selected . '>' . $annotation['annotation_text'] . '</option>';
+        echo '<li>
+                <label for="annotation_' . $annotation['id'] . '">
+                    <input type="checkbox" id="annotation_' . $annotation['id'] . '" name="selected_annotations[]" value="' . $annotation['id'] . '"';
+                    if (in_array($annotation['id'], $selectedAnnotations)) {
+                        echo ' checked';
+                    }
+        echo '>' . $annotation['annotation_text'] . '
+                </label>
+            </li>';
     }
 
     echo '
-                </select><br>
-                <input class="add_btn" type="submit" value="Submit">
-                <input class="delete_btn" type="submit" name="delete_annotation" value="Delete Annotation">
-                <input class="delete-all-btn" type="submit" name="delete_all_annotations" value="Delete All Annotations">
+                </ul>
+                
+                <button type="submit" name="delete_annotation">Delete Selected Annotations</button>
+                <button type="submit" name="delete_all_annotations">Delete All Annotations</button>
+                <button type="submit" name="submit">Submit Annotations</button>
             </form>
         </div>
+
         <div id="annotation-form" class="annotation-form-container">
             <form id="add-annotation-form" method="POST" action="add_annotation.php">
                 <label for="annotation-text">Annotation Text:</label>
