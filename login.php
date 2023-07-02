@@ -58,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Do not forget to explicitely end or destroy session!!!!!!!
 
 ?>
 
@@ -67,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 <body>
 <div class="container">
@@ -85,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit">Login</button>
 
     </form>
-    <p>Don't have an account? <a class="link" href="registration.php">Register</a></p>
+    <p>Don't have an account? <a class="link" href="./registration.php">Register</a></p>
 </div>
 </body>
 </html>

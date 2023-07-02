@@ -70,7 +70,7 @@ if ($stmt->fetch()) {
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css">
-        <link rel="stylesheet" href="panorama_viewer.css">
+        <link rel="stylesheet" href="./panorama_viewer.css">
         <style>
             .annotation-marker {
                 position: absolute;
@@ -108,8 +108,8 @@ if ($stmt->fetch()) {
 
     echo '
                 </ul>
-                <input class="submit_btn"  type="submit" name="submit"value="Submit Annotation"></button>
-                <input class="delete_btn"  type="submit" name="delete_annotation" value="Delete Selected Annotation(s)"></button>
+                <input class="submit_btn"  type="submit" name="submit"value="Submit Annotation(s)"></button>
+                <input class="delete_btn"  type="submit" name="delete_annotation" value="Delete Annotation(s)"></button>
             </form>
         </div>
 
