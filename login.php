@@ -61,11 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<!-- login.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Login Page</title>
     <link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 <body>
