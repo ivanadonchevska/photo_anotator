@@ -31,7 +31,7 @@ if ($conn->connect_error) {
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Photo Uploader and Home Page</title>
+        <title>Home Page</title>
         <link rel="stylesheet" type="text/css" href="./home_page1.css">
         <script>
         // Handle the form submission for deleting a photo
